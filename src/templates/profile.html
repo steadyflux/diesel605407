@@ -1,16 +1,49 @@
 {% extends "base.html" %}
 {% block main %}
 <div id="content" class="login">
-	{% if message %}
-	<p class="errornote">{{ message }}</p>
-	{% endif %}
+    {% if message %}
+    <p class="errornote">
+        {{ message }}
+    </p>
+    {% endif %}
     <table>
         <form name="profile" method="post" action="/fuel/user/update/">
             {{user_form}}
-			{{profile_form}}
+            {{profile_form}}
         </form>
     </table>
-	<br/>
-	<a href="javascript:document.profile.submit();" id="dialog_link" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-disk"></span>Update Profile</a>
+    <br/>
+    <p>
+        <a href="javascript:document.profile.submit();" id="update" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-disk"></span>Update Profile</a>
+        <a href="#" id="dialog_link" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-disk"></span>Delete Account</a>
+    </p>
+    <div id="dialog" title="Delete Account?">
+        <h3>
+            Confirm Account Delete.
+        </h3>
+		<p>Are you sure you want to delete your account? This cannot be undone.</p>
+		<form name="delete_account" method="post" action="/fuel/user/delete/"></form>
+    </div>
 </div>
+<script type="text/javascript">
+    $(function(){
+        $('#dialog_link').click(function(){
+            $('#dialog').dialog('open');
+            return false;
+        });
+        
+        $('#dialog').dialog({
+            autoOpen: false,
+            width: 600,
+            buttons: {
+                "Confirm": function(){
+                    document.delete_account.submit();
+                },
+                "Cancel": function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -50,13 +50,13 @@ body {
     color: red;
 }
 
-#dialog_link {
+.dialog_link {
     padding: .4em 1em .4em 20px;
     text-decoration: none;
     position: relative;
 }
 
-#dialog_link span.ui-icon {
+.dialog_link span.ui-icon {
     margin: 0 5px 0 0;
     position: absolute;
     left: .2em;

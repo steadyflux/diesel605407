@@ -5,17 +5,17 @@
         Welcome to Diesel DC, we ask that you take a short moment to register for the site.
     </p>
     <table>
-        <form action="/accounts/register/" method="post">
+        <form name="register" action="/accounts/register/" method="post">
             {{ form }}
             <tr>
                 <th>
                     <label>
                         &nbsp;
                     </label>
-                    <input type="submit" value="Register" />
                 </th>
             </tr>
         </form>
     </table>
+	<p><a href="javascript:document.register.submit();" id="update" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-disk"></span>Register</a></p>
 </div>
 {% endblock %}

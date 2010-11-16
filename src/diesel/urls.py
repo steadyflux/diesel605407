@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r'^fuel/announcement/add$', 'fuel.views.addAnnouncement'),
     (r'^fuel/user/profile', 'fuel.views.userProfile'),
     (r'^fuel/user/update', 'fuel.views.userUpdate'),
+    (r'^fuel/user/delete', 'fuel.views.userDelete'),
     (r'^accounts/', include('registration.backends.default.urls')),             
     (r'^admin/', include(admin.site.urls)),
 )

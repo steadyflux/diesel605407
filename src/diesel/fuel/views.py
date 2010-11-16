@@ -78,3 +78,10 @@ def userUpdate(request):
         profile_form.save()
         return renderProfile(request, user_form, profile_form, 'Saved Successfully')
     return renderProfile(request, user_form, profile_form, 'Errors Exist')
+
+@login_required
+def userDelete(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    return redirect("/fuel/")
