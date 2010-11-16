@@ -1,0 +1,23 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/humanity/jquery-ui-1.8.6.custom.css"/>
+	<script type="text/javascript" src="/static/javascript/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="/static/javascript/jquery-ui-1.8.6.custom.min.js"></script>
+
+</head>
+<div id="container">
+    {% block header %}
+    {% include 'header.html' %}
+    {% endblock %}
+	
+    <div id="content-container">
+        {% block main %}
+        BASE CASE IS EMPTY
+        {% endblock %}
+    </div>
+	
+    {% block footer %}
+    {% include 'footer.html' %}
+    {% endblock %}
+</div>

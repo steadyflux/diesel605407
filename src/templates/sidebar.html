@@ -1,0 +1,46 @@
+<div id="aside">
+    <h3>Announcements</h3>
+	
+    {%for a in announcements%}
+    <p>
+        <b>{{a}}</b> - {{a.text}}
+    </p>
+    {% endfor %}
+	<br/>
+    {% if perms.fuel.add_annoucement %}
+    <div>
+        <a href="#" id="dialog_link" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a>
+    </div>
+    <div id="dialog" title="Dialog Title">
+        <p>
+            Add Announcement.
+        </p>
+        <table>
+            <form action="/fuel/announcement/add" method="post" name="add_announcement">
+                {{announcement_form}}
+            </form>
+        </table>
+    </div>
+    {% endif %}
+</div>
+<script type="text/javascript">
+    $(function(){
+        $('#dialog_link').click(function(){
+            $('#dialog').dialog('open');
+            return false;
+        });
+        
+        $('#dialog').dialog({
+            autoOpen: false,
+            width: 600,
+            buttons: {
+                "Add": function(){
+                    document.add_announcement.submit();
+                },
+                "Cancel": function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>

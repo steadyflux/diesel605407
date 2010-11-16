@@ -1,0 +1,2 @@
+[{"pk": 1, "model": "auth.user", "fields": {"username": "admin", "first_name": "", "last_name": "", "is_active": true, "is_superuser": true, "is_staff": true, "last_login": "2010-11-13 08:43:23", "groups": [], "user_permissions": [], "password": "sha1$5be80$5a088f2f7955c941c4d5ab3f28dd4c59fa48b552", "email": "ktbaynes@gmail.com", "date_joined": "2010-11-13 08:43:23"}},
+{"pk": 1, "model": "sites.site", "fields": {"domain": "192.168.1.3:8000", "name": "DC Diesel"}}]

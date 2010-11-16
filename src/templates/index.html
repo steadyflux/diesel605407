@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block main %}
+<div id="content" class="login">
+    {% if user.is_authenticated %}
+	    <p>
+	        Welcome, {{ user.username }}. Thanks for logging in.
+	    </p>
+    {% else %}
+	    <p>
+	        Welcome, new user. Please log in.
+			{% include 'login.html' %}
+	    </p>
+    {% endif %}	
+</div>
+{% include 'sidebar.html' %}
+{% endblock %}
