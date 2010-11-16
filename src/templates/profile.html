@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block main %}
+<div id="content" class="login">
+	{% if message %}
+	<p class="errornote">{{ message }}</p>
+	{% endif %}
+    <table>
+        <form name="profile" method="post" action="/fuel/user/update/">
+            {{user_form}}
+			{{profile_form}}
+        </form>
+    </table>
+	<br/>
+	<a href="javascript:document.profile.submit();" id="dialog_link" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-disk"></span>Update Profile</a>
+</div>
+{% endblock %}
