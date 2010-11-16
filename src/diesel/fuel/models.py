@@ -5,6 +5,13 @@ from django.forms.models import ModelForm
 from django.contrib.auth.models import User
 
 
+class UserProfile(models.Model):
+
+    user = models.ForeignKey(User, unique=True)
+
+    vehicles = models.ManyToManyField('Vehicle')
+    lucky_number = models.IntegerField(blank=True, null=True)
+
 class Station(models.Model):
     name = models.CharField(max_length=20)
     address = models.CharField(max_length=128, verbose_name='Address')
@@ -58,3 +65,13 @@ class AnnouncementForm(ModelForm):
     class Meta:
         model = Announcement
         exclude = ('created_by',)
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','first_name', 'last_name', 'email']
+     
+class UserProfileForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ['user','vehicles']

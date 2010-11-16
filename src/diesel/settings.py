@@ -45,7 +45,7 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/Users/ktbaynes/Documents/workspace/diesel/src/static/'
+MEDIA_ROOT = '/Users/ktbaynes/Documents/workspace/diesel605407/src/static/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'diesel.urls'
 
 TEMPLATE_DIRS = (
-    '/Users/ktbaynes/Documents/workspace/diesel/src/templates'
+    '/Users/ktbaynes/Documents/workspace/diesel605407/src/templates'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -95,6 +95,9 @@ INSTALLED_APPS = (
 )
 
 ACCOUNT_ACTIVATION_DAYS=1
+
+AUTH_PROFILE_MODULE = "fuel.userprofile"
+
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'dieseldcist@gmail.com'
