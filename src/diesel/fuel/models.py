@@ -18,6 +18,8 @@ class Station(models.Model):
     city = models.CharField(max_length=64, verbose_name='City')
     state = models.CharField(max_length=32, verbose_name='State')
     zip = models.CharField(max_length=10, verbose_name='Zip')
+    phone_number = models.CharField(max_length=12)
+    has_separate_pumps = models.NullBooleanField()
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -38,7 +40,13 @@ class StationForm(ModelForm):
                   'state'  : USStateField(),
         }
 
+
+class FuelPrice(models.Model):
+    station = models.ForeignKey(Station)
+    price = models.DecimalField(max_digits=4, decimal_places=2)   
+
 class Vehicle(models.Model):
+    owner = models.ManyToManyField('UserProfile')
     
     make = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
