@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block main %}
+<div id="content">
+    <fieldset>
+        <legend>
+            Search for Stations by Location
+        </legend>
+        <p>
+            Please enter either a zip code or an address.
+        </p>
+        <table>
+            <form name="search" method="post" action="/fuel/station/search/perform/">
+                {{search_form}}
+            </form>
+        </table>
+        <br/>
+        <div>
+            <a href="javascript:document.search.submit();" id="update" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-search"></span>Search</a>
+        </div>
+    </fieldset>
+    {% if results %}
+    <fieldset>
+        <legend>
+            Results
+        </legend>
+        <table class="resultlist">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Distance (miles)
+                </th>
+            </tr>
+            {% for r in results %}
+            <tr class="{% cycle 'odd' 'even' %}">
+                <td>
+                    {{r.title|safe}}
+                </td>
+                <td>
+                    {{r.address|safe}}
+                    <br>
+                    {{r.city}}, {{r.state}}
+                </td>
+                <td>
+                    {{r.distance}}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+    {% endif %}
+</div>
+{% include 'sidebar.html' %}
+{% endblock %}

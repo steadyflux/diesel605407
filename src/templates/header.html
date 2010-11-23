@@ -5,7 +5,7 @@
 <div id="navigation">
     <ul>
     	<li>
-            <a href="/fuel/station/search">Geographical Station Search</a>
+            <a href="/fuel/station/search/load">Geographical Station Search</a>
         </li>
         <li>
             <a href="/fuel/">Home</a>
@@ -19,10 +19,15 @@
         <li>
             <a href="/fuel/">Contact us</a>
         </li>
+		{% if user.is_active %}
         <li>
             <a href="/fuel/logout">Logout</a>
         </li>
-		
+		{% else %}
+		<li>
+			<a href="/fuel/">Login</a>
+		</li>
+		{% endif %}
 
     </ul>
 </div>

@@ -2,11 +2,10 @@ body {
     margin: 0;
     padding: 0;
     font-size: 12px;
-    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
     color: #202626;
     background: #FCFAE2;
 }
-
 
 .login #content-main {
     width: 100%;
@@ -82,3 +81,45 @@ ul#icons span.ui-icon {
     float: left;
     margin: 0 4px;
 }
+
+th {
+	font-size: 12px;
+}
+
+
+fieldset legend: {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.resultlist {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    margin: 15px;
+    padding-left: 6px;
+	padding-right: 6px;
+    width: 95%;
+    text-align: left;
+	background-color: #576530;
+}
+
+.resultlist th {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 8px;
+    color: #FFEDC0;
+	border: 2px
+}
+
+.resultlist td {
+    padding: 8px;
+}
+
+.resultlist .even {
+	background: #FCFAE2;
+}
+
+.resultlist .odd {
+    background: #A9B593;
+}
+
