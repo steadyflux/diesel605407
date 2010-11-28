@@ -16,8 +16,11 @@ urlpatterns = patterns('',
     (r'^fuel/user/update', 'fuel.views.userUpdate'),
     (r'^fuel/user/delete', 'fuel.views.userDelete'),
     
+    (r'^fuel/station/search/$', 'fuel.views.searchScreen'),
     (r'^fuel/station/search/load', 'fuel.views.searchScreen'),
     (r'^fuel/station/search/perform', 'fuel.views.searchPerform'),
+    
+    (r'^fuel/station/(?P<id>\d+)', 'fuel.views.stationHome'),
     
     (r'^accounts/', include('registration.backends.default.urls')),             
     (r'^admin/', include(admin.site.urls)),

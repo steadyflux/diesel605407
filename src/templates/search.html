@@ -31,6 +31,9 @@
                 <th>
                     Address
                 </th>
+				<th>
+                    Current Price
+                </th>
                 <th>
                     Distance (miles)
                 </th>
@@ -38,13 +41,18 @@
             {% for r in results %}
             <tr class="{% cycle 'odd' 'even' %}">
                 <td>
-                    {{r.title|safe}}
+                    <a href="/fuel/station/{{r.pk}}">{{r.name|safe}}</a>
                 </td>
                 <td>
                     {{r.address|safe}}
                     <br>
                     {{r.city}}, {{r.state}}
+					<br>
+					{{r.phone}}
                 </td>
+				<td>
+					{{r.current_price}}
+				</td>
                 <td>
                     {{r.distance}}
                 </td>

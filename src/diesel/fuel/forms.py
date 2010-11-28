@@ -5,6 +5,7 @@ Created on Nov 21, 2010
 '''
 from django import forms
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
+from diesel.fuel.models import DIESEL_TYPE
 
 NUM_RESULTS = (
                ('5', '5'),
@@ -18,3 +19,4 @@ class SearchForm(forms.Form):
     city = forms.CharField(required=False)
     state = USStateField(required=False)
     zip = USZipCodeField(required=False)
+    centane_rating = forms.ChoiceField(choices=DIESEL_TYPE)

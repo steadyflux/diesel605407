@@ -1,13 +1,17 @@
+from django.core.exceptions import ObjectDoesNotExist
 from urllib2 import urlopen, HTTPError, URLError
 from BeautifulSoup import BeautifulSoup
+from diesel.fuel.models import Station
+from urllib import quote_plus
 
-def searchQuery(location, num_results):
+def searchQuery(location, num_results, centane_filter=None):
     search_url = 'http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=1rnOAGjV34FSCwQczSLF_c68OT7Axcx2SHRhkggI3_GKoksidy.GucjpgqNR0gI-&query=gas&'
     search_url += '&category=96925722'
     search_url += '&sort=distance'
-    search_url += '&location=' + location.strip()
+    search_url += '&location=' + quote_plus(location.strip())
     search_url += '&results=' + num_results
-    return doQuery(search_url)
+    results = doQuery(search_url)
+    return processResults(results, centane_filter)
 
 def doQuery(url):
     results = []
@@ -18,20 +22,13 @@ def doQuery(url):
         #print soup.prettify()
         #results_xml = soup.findAll('result')
         for result in soup.findAll('result'):
-            #print result
-            #title = result.find('title', limit=1)
-            #address = result.find('address', limit=1)
-            #city = result.find('city', limit=1)
-            #state = result.find('state', limit=1)
-            #phone = result.find('phone', limit=1)
-            #distance = result.find('distance', limit=1)
-            title = result.find('title').find(text=True)
+            name = result.find('title').find(text=True)
             address = result.find('address').find(text=True)
             city = result.find('city').find(text=True)
             state = result.find('state').find(text=True)
             phone = result.find('phone').find(text=True)
             distance = result.find('distance').find(text=True)
-            results.append({"title": str(title) , 
+            results.append({"name": str(name) , 
                             "address": str(address), 
                             "city": str(city), 
                             "state": str(state),
@@ -44,3 +41,41 @@ def doQuery(url):
     except URLError, e:
         print "Network error: %s" % e.reason.args[1]
     return results
+
+def processResults(queryResults, centane_filter=None):
+    stationList = []
+    for result in queryResults:
+        station = None
+        #see if this station is being tracked already
+        try:
+            station = Station.objects.get(address=result['address'])
+            print 'already existing station: ' + station.name
+            station.name = result['name']
+            station.city = result['city']
+            station.state = result['state']
+            station.phone = result['phone']
+            result['has_separate_pumps'] = station.has_separate_diesel_pumps
+            result['diesel_grade'] = station.diesel_grade
+            result['current_price'] = station.current_price()
+            result['pk'] = station.id
+        except ObjectDoesNotExist:
+            #create new
+            station = Station.objects.create()
+            print 'creating new station: ' + result['name']
+            station.name = result['name']
+            station.address = result['address']
+            station.city = result['city']
+            station.state = result['state']
+            station.phone = result['phone']
+            result['has_separate_pumps'] = '-'
+            result['diesel_grade'] = '-'
+            result['current_price'] = '-'
+            result['pk'] = station.id
+        station.save()
+        if station:
+            if centane_filter:
+                if station.diesel_grade == centane_filter:
+                    stationList.append(result)
+            else:
+                stationList.append(result)
+    return stationList

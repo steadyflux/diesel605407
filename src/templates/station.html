@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block main %}
+<div id="content">
+    <fieldset>
+        <legend>
+            {{station.name}}
+        </legend>
+        <img src="/static/images/image_placeholder.png" style="display:inline;" width="100" height="100"/>
+        <br/>
+        <br/>
+        <div>
+            <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Station Image</a>
+        </div>
+        <p>
+            {{station.address}}
+            <br/>
+            {{station.city}}, {{station.state}}
+            <br/>
+            {{station.phone}}
+        </p>
+        <h3>Current Price: 
+            <small>
+                (as of {{station.last_price_update}})
+            </small>
+        </h3>
+        <table>
+            <tr>
+                <td width="100">
+                    <p style="font-size: 12px;">
+                        {{station.current_price}}
+                    </p>
+                </td>
+                <td>
+                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Price</a>
+                </td>
+            </tr>
+        </table>
+        <h3>Diesel Grade:</h3>
+        <table>
+            <tr>
+                <td width="100">
+                    <p style="font-size: 12px;">
+                        {{station.diesel_grade}}
+                    </p>
+                </td>
+                <td>
+                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Grade</a>
+                </td>
+            </tr>
+        </table>
+        <h3>Has Separate Pumps for Diesel:</h3>
+        <table>
+            <tr>
+                <td width="100">
+                    <p style="font-size: 12px;">
+                        {{station.has_separate_diesel_pumps}} 
+                    </p>
+                </td>
+                <td>
+                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Type</a>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <br/>
+    </fieldset>
+</div>
+{% include 'sidebar.html' %}
+{% endblock %}

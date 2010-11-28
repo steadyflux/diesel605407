@@ -63,6 +63,23 @@ body {
     margin-top: -8px;
 }
 
+.mini_link {
+    padding: 1px 3px 1px 18px;
+	font-size: 10px;
+    text-decoration: none;
+    position: relative;
+}
+
+.mini_link span.ui-icon {
+    margin: 0 2px 0 0;
+    position: absolute;
+    left: .2em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+
+
 ul#icons {
     margin: 0;
     padding: 0;

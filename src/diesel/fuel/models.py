@@ -4,6 +4,12 @@ from django.contrib.localflavor.us.forms import USZipCodeField
 from django.forms.models import ModelForm
 from django.contrib.auth.models import User
 
+DIESEL_TYPE = (
+               ("Unknown","-"),
+               ("ULSD_40","Ultra Low Sulfer Diesel 40 Centane"),
+               ("ULSD_OVER_40","Ultra Low Sulfer Diesel Above 40 Centane"),
+               ("LSD","Low Sulfer Diesel"),
+              )
 
 class UserProfile(models.Model):
 
@@ -13,19 +19,26 @@ class UserProfile(models.Model):
     lucky_number = models.IntegerField(blank=True, null=True)
 
 class Station(models.Model):
-    name = models.CharField(max_length=20)
-    address = models.CharField(max_length=128, verbose_name='Address')
-    city = models.CharField(max_length=64, verbose_name='City')
-    state = models.CharField(max_length=32, verbose_name='State')
-    zip = models.CharField(max_length=10, verbose_name='Zip')
-    phone_number = models.CharField(max_length=12)
-    has_separate_pumps = models.NullBooleanField()
+    name = models.CharField(max_length=128)
+    address = models.CharField(max_length=128, verbose_name='Address', blank=True, null=True)
+    city = models.CharField(max_length=64, verbose_name='City', blank=True, null=True)
+    state = models.CharField(max_length=32, verbose_name='State', blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    has_separate_diesel_pumps = models.NullBooleanField()
+    is_not_gas_station = models.NullBooleanField()
+    diesel_grade = models.CharField(max_length=128, choices=DIESEL_TYPE, default='Unknown') 
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    
+    def current_price(self):
+        try:
+            return FuelPrice.objects.filter(station=self).latest('creation_date').price
+        except:
+            return '-'
 
     def __unicode__(self):
-        return self.name
+        return self.name + " - " + self.address + " " + self.city + ", " + self.state
 
 class StationForm(ModelForm):
     class Meta:
@@ -43,7 +56,8 @@ class StationForm(ModelForm):
 
 class FuelPrice(models.Model):
     station = models.ForeignKey(Station)
-    price = models.DecimalField(max_digits=4, decimal_places=2)   
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)   
 
 class Vehicle(models.Model):
     owner = models.ManyToManyField('UserProfile')

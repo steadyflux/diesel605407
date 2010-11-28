@@ -3,9 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from diesel.fuel.models import AnnouncementForm, Announcement, UserProfileForm,\
-    UserProfile, UserForm
+    UserProfile, UserForm, Station
     
-from diesel.fuel.stationtools import searchQuery
+from diesel.fuel.stationtools import searchQuery, processResults
 from diesel.fuel.forms import SearchForm
 
 def index(request):
@@ -91,36 +91,45 @@ def userDelete(request):
 
 
 def searchScreen(request):    
-    searchFields = SearchForm()
+    searchFields = SearchForm(initial={'centane_rating': 'Unknown'})
     return render_to_response('search.html', {
                                               'search_form': searchFields,
                                               'announcements': Announcement.objects.all()},
                                              context_instance=RequestContext(request))
 
 def searchPerform(request):
-    print "here i am"
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             search_form = form.cleaned_data
             location = ""
             if search_form['address']:
-                location += search_form['address'] + " "
+                location += search_form['address'] + ","
             if search_form['city']:
-                location += search_form['city'] + " "
+                location += search_form['city'] + ","
             if search_form['state']:
-                location += search_form['state'] + " "
+                location += search_form['state'] + ","
             if search_form['zip']:
-                location += search_form['zip'] + " "
+                location += search_form['zip']
+            location = location.rstrip().rstrip(',')
             print location
-            results = searchQuery(location, search_form['num_results'])
-            print results
-            print len(results)
+            centane_filter = None
+            if search_form['centane_rating']:
+                centane_filter = search_form['centane_rating']
+            print centane_filter
+            results = searchQuery(location, search_form['num_results'], centane_filter)
     return render_to_response('search.html', {
                                               'search_form': form,
                                               'announcements': Announcement.objects.all(),
                                               'results': results},
                                              context_instance=RequestContext(request))
     
-    
+
+def stationHome(request, id):
+    print id
+    station = Station.objects.get(id=id)
+    return render_to_response('station.html', {
+                                              'station': station,
+                                              'announcements': Announcement.objects.all()},
+                                             context_instance=RequestContext(request))  
 
