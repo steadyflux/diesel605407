@@ -21,6 +21,9 @@ urlpatterns = patterns('',
     (r'^fuel/station/search/perform', 'fuel.views.searchPerform'),
     
     (r'^fuel/station/(?P<id>\d+)', 'fuel.views.stationHome'),
+    (r'^fuel/station/image/(?P<id>\d+)', 'fuel.views.uploadStationImage'),
+    (r'^fuel/station/price/(?P<id>\d+)', 'fuel.views.priceUpdate'),
+    (r'^fuel/station/comment/(?P<id>\d+)', 'fuel.views.addStationComment'),
     
     (r'^accounts/', include('registration.backends.default.urls')),             
     (r'^admin/', include(admin.site.urls)),

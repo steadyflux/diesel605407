@@ -20,3 +20,11 @@ class SearchForm(forms.Form):
     state = USStateField(required=False)
     zip = USZipCodeField(required=False)
     centane_rating = forms.ChoiceField(choices=DIESEL_TYPE)
+    
+class UploadFileForm(forms.Form):
+    file  = forms.FileField()
+    
+class PriceForm(forms.Form):
+    price = forms.CharField()
+    
+    

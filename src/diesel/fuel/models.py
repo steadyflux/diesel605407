@@ -24,6 +24,9 @@ class Station(models.Model):
     city = models.CharField(max_length=64, verbose_name='City', blank=True, null=True)
     state = models.CharField(max_length=32, verbose_name='State', blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
+    
+    image = models.ImageField(upload_to='photos/%Y/%m/%d', blank=True, null=True)
+    
     has_separate_diesel_pumps = models.NullBooleanField()
     is_not_gas_station = models.NullBooleanField()
     diesel_grade = models.CharField(max_length=128, choices=DIESEL_TYPE, default='Unknown') 
@@ -33,7 +36,7 @@ class Station(models.Model):
     
     def current_price(self):
         try:
-            return FuelPrice.objects.filter(station=self).latest('creation_date').price
+            return FuelPrice.objects.filter(station=self).latest('created').price
         except:
             return '-'
 
@@ -43,21 +46,34 @@ class Station(models.Model):
 class StationForm(ModelForm):
     class Meta:
         model = Station
-        fields = ('address', #This form uses a subset of fields from the model
+        fields = ['address', #This form uses a subset of fields from the model
                   'city',
                   'state',
                   'zip',
-                  'phone')
+                  'phone']
         widgets = {
                   'zip'    : USZipCodeField(),
                   'state'  : USStateField(),
         }
 
+class StationUserComments(models.Model):
+    station = models.ForeignKey(Station)
+    user = models.ForeignKey(User, unique=False)
+    created = models.DateTimeField(auto_now_add=True) 
+    text = models.TextField()
+
+class StationUserCommentsForm(ModelForm):
+    class Meta:
+        model = StationUserComments
+        fields = ['text']   
 
 class FuelPrice(models.Model):
     station = models.ForeignKey(Station)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)   
+    
+    def __unicode__(self):
+        return str(self.station.name) + " - $%(num).2f - " % {"num" : self.price} + self.created.strftime("%m/%d/%Y")
 
 class Vehicle(models.Model):
     owner = models.ManyToManyField('UserProfile')

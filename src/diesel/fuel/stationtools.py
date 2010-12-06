@@ -1,8 +1,14 @@
 from django.core.exceptions import ObjectDoesNotExist
 from urllib2 import urlopen, HTTPError, URLError
 from BeautifulSoup import BeautifulSoup
-from diesel.fuel.models import Station
+from diesel.fuel.models import Station, FuelPrice
 from urllib import quote_plus
+from matplotlib.figure import Figure
+from matplotlib.dates import DateFormatter
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from django.http import HttpResponse
+from matplotlib import pyplot
+
 
 def searchQuery(location, num_results, centane_filter=None):
     search_url = 'http://local.yahooapis.com/LocalSearchService/V3/localSearch?appid=1rnOAGjV34FSCwQczSLF_c68OT7Axcx2SHRhkggI3_GKoksidy.GucjpgqNR0gI-&query=gas&'
@@ -79,3 +85,22 @@ def processResults(queryResults, centane_filter=None):
             else:
                 stationList.append(result)
     return stationList
+
+def buildPriceGraph(id):
+    prices = FuelPrice.objects.filter(station=id).order_by('created')
+    y = []
+    x = []
+    for price in prices:
+        y.append(price.price)
+        x.append(price.created)
+    fig=Figure()
+    ax=fig.add_subplot(111)
+
+    ax.plot_date(x, y, '-')
+    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+    fig.autofmt_xdate()
+    canvas=FigureCanvasAgg(fig)
+    response=HttpResponse(content_type='image/png')
+    canvas.print_png(response)
+    pyplot.close(fig)
+    return response

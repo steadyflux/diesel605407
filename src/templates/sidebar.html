@@ -9,9 +9,9 @@
 	<br/>
     {% if perms.fuel.add_annoucement %}
     <div>
-        <a href="#" id="dialog_link" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a>
+        <a href="#" id="announcement_dialog_link" class="ui-state-default ui-corner-all dialog_link"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a>
     </div>
-    <div id="dialog" title="Add Announcement">
+    <div id="announcement_dialog" title="Add Announcement">
         <p>
             Add Announcement.
         </p>
@@ -25,12 +25,12 @@
 </div>
 <script type="text/javascript">
     $(function(){
-        $('#dialog_link').click(function(){
-            $('#dialog').dialog('open');
+        $('#announcement_dialog_link').click(function(){
+            $('#announcement_dialog').dialog('open');
             return false;
         });
         
-        $('#dialog').dialog({
+        $('#announcement_dialog').dialog({
             autoOpen: false,
             width: 600,
             buttons: {

@@ -3,10 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from diesel.fuel.models import AnnouncementForm, Announcement, UserProfileForm,\
-    UserProfile, UserForm, Station
-    
-from diesel.fuel.stationtools import searchQuery, processResults
-from diesel.fuel.forms import SearchForm
+    UserProfile, UserForm, Station, FuelPrice, StationUserComments,\
+    StationUserCommentsForm
+from diesel.fuel.stationtools import searchQuery
+from diesel.fuel.forms import SearchForm, UploadFileForm, PriceForm
+from django.http import HttpResponseRedirect
 
 def index(request):
     print request.user.is_authenticated()
@@ -130,6 +131,47 @@ def stationHome(request, id):
     station = Station.objects.get(id=id)
     return render_to_response('station.html', {
                                               'station': station,
-                                              'announcements': Announcement.objects.all()},
-                                             context_instance=RequestContext(request))  
+                                              'announcements': Announcement.objects.all(),
+                                              'image_upload_form': UploadFileForm(),
+                                              'price_form': PriceForm(),
+                                              'comments': StationUserComments.objects.filter(station=id),
+                                              'comment_form': StationUserCommentsForm()},
+                                             context_instance=RequestContext(request))
+    
 
+
+@login_required
+def uploadStationImage(request, id):
+    if request.method == 'POST':
+        station = Station.objects.get(id=id)
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            station.image = request.FILES['file']
+            station.save()
+        else:
+            print form.errors
+    else:
+        form = UploadFileForm()
+    return HttpResponseRedirect('/fuel/station/' + id)
+
+@login_required
+def priceUpdate(request, id):
+    if request.method == 'POST':
+        form = PriceForm(request.POST)
+        if form.is_valid():
+            new_price = FuelPrice.objects.create(station_id = id, price = request.POST['price'])
+            new_price.save()
+        else:
+            print form.errors
+    return HttpResponseRedirect('/fuel/station/' + id)
+
+@login_required
+def addStationComment(request, id):
+    if request.method == 'POST':
+        form = StationUserCommentsForm(request.POST)
+        if form.is_valid():
+            new_comment = StationUserComments.objects.create(station_id = id, text=request.POST['text'], user=request.user)
+            new_comment.save()
+        else:
+            print form.errors
+    return HttpResponseRedirect('/fuel/station/' + id)

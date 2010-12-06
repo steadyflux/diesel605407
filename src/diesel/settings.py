@@ -91,7 +91,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'registration',
-    'fuel'
+    'fuel',
+    'matplotlib'
 )
 
 ACCOUNT_ACTIVATION_DAYS=1

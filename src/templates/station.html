@@ -5,12 +5,14 @@
         <legend>
             {{station.name}}
         </legend>
-        <img src="/static/images/image_placeholder.png" style="display:inline;" width="100" height="100"/>
+        {% if station.image %}<img src="{{station.image.url}}" style="display:inline;" width="200" height="200"/>{% else %}<img src="/static/images/image_placeholder.png" style="display:inline;" width="100" height="100"/>{% endif %}
         <br/>
         <br/>
+        {% if perms.fuel.change_station %}
         <div>
-            <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Station Image</a>
+            <a href="#" id="image_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-newwin"></span>Update Image</a>
         </div>
+        {% endif %}
         <p>
             {{station.address}}
             <br/>
@@ -30,8 +32,13 @@
                         {{station.current_price}}
                     </p>
                 </td>
+                {% if perms.fuel.change_station %}
                 <td>
-                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Price</a>
+                    <a href="#" id="price_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Price</a>
+                </td>
+                {% endif %}
+                <td>
+                    <a href="#" id="price_graph" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-newwin"></span>Get Price Graph</a>
                 </td>
             </tr>
         </table>
@@ -43,9 +50,11 @@
                         {{station.diesel_grade}}
                     </p>
                 </td>
+                {% if perms.fuel.change_station %}
                 <td>
-                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Grade</a>
+                    <a href="#" id="grade_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Grade</a>
                 </td>
+                {% endif %}
             </tr>
         </table>
         <h3>Has Separate Pumps for Diesel:</h3>
@@ -56,14 +65,132 @@
                         {{station.has_separate_diesel_pumps}} 
                     </p>
                 </td>
+                {% if perms.fuel.change_station %}
                 <td>
-                    <a href="#" id="update" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Type</a>
+                    <a href="#" id="type_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Update Type</a>
                 </td>
+                {% endif %}
             </tr>
         </table>
         <br/>
         <br/>
+        <h3>User Comments:</h3>
+        <table class="resultlist">
+            <tr>
+                {% if perms.fuel.change_station %}
+                <td>
+                    <a href="#" id="add_comment_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Add Comment</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% for c in comments %}
+            <tr class="{% cycle 'odd' 'even' %}">
+                <td>
+                    {{c.text}}
+                    <small style="color: #666">
+                        ({{c.user}} {{c.created}})
+                    </small>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                {% if perms.fuel.change_station %}
+                <td>
+                    <a href="#" id="add_comment_dialog_link" class="ui-state-default ui-corner-all mini_link"><span class="ui-icon ui-icon-pencil"></span>Add Comment</a>
+                </td>
+                {% endif %}
+            </tr>
+        </table>
     </fieldset>
 </div>
+{% if perms.fuel.change_station %}
+<div id="image_dialog" title="Add Image">
+    <p>
+        Choose Image to Upload
+    </p>
+    <table>
+        <form action="/fuel/station/image/{{station.id}}" method="post" name="add_image" enctype="multipart/form-data">
+            {{image_upload_form}}
+        </form>
+    </table>
+</div>
+<div id="price_dialog" title="Update Price">
+    <p>
+        Enter Price (User x.xx Format)
+    </p>
+    <table>
+        <form action="/fuel/station/price/{{station.id}}" method="post" name="update_price">
+            {{price_form}}
+        </form>
+    </table>
+</div>
+<div id="comment_dialog" title="Update Price">
+    <p>
+        Enter Comment
+    </p>
+    <table>
+        <form action="/fuel/station/comment/{{station.id}}" method="post" name="add_comment">
+            {{comment_form}}
+        </form>
+    </table>
+</div>
+{% endif %}
+<script type="text/javascript">
+    $(function(){
+        $('#image_dialog_link').click(function(){
+            $('#image_dialog').dialog('open');
+            return false;
+        });
+        
+        $('#image_dialog').dialog({
+            autoOpen: false,
+            width: 600,
+            buttons: {
+                "Add": function(){
+                    document.add_image.submit();
+                },
+                "Cancel": function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+        $('#price_dialog_link').click(function(){
+            $('#price_dialog').dialog('open');
+            return false;
+        });
+        
+        $('#price_dialog').dialog({
+            autoOpen: false,
+            width: 600,
+            buttons: {
+                "Update": function(){
+                    document.update_price.submit();
+                },
+                "Cancel": function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+        $('#add_comment_dialog_link').click(function(){
+            $('#comment_dialog').dialog('open');
+            return false;
+        });
+        
+        $('#comment_dialog').dialog({
+            autoOpen: false,
+            width: 600,
+            buttons: {
+                "Add Comment": function(){
+                    document.add_comment.submit();
+                },
+                "Cancel": function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>
 {% include 'sidebar.html' %}
 {% endblock %}
